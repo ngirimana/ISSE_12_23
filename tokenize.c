@@ -89,6 +89,110 @@ TokenType determineTokenType(char c)
 }
 
 // Update the TOK_tokenize_input function
+// CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
+// {
+//     CList tokens = CL_new();
+//     char buffer[MAX_TOKEN_LENGTH];
+//     int buffer_index = 0;
+//     int input_length = strlen(input);
+//     int in_quote = 0;
+//     int escaped = 0;
+
+//     for (int i = 0; i < input_length; ++i)
+//     {
+//         char current_char = input[i];
+//         Token token;
+
+//         if (current_char == '\\' && !escaped)
+//         {
+//             escaped = 1;
+//             continue; // Skip the current character
+//         }
+
+//         if (escaped)
+//         {
+//             escaped = 0;
+//             switch (current_char)
+//             {
+//             case 'n':
+//                 current_char = '\n';
+//                 break;
+//             case 'r':
+//                 current_char = '\r';
+//                 break;
+//             case 't':
+//                 current_char = '\t';
+//                 break;
+//             }
+//         }
+//         else if (current_char == '"')
+//         {
+//             in_quote = !in_quote;
+//             if (!in_quote && buffer_index > 0)
+//             {
+//                 buffer[buffer_index] = '\0';
+//                 token.type = TOK_QUOTED_WORD;
+//                 token.value = strdup(buffer);
+//                 CL_append(tokens, token);
+//                 buffer_index = 0;
+//             }
+//             continue;
+//         }
+//         else if (!in_quote)
+//         {
+//             TokenType special_type = determineTokenType(current_char);
+//             if (special_type != TOK_WORD)
+//             {
+//                 if (buffer_index > 0)
+//                 {
+//                     buffer[buffer_index] = '\0';
+//                     token.type = TOK_WORD;
+//                     token.value = strdup(buffer);
+//                     CL_append(tokens, token);
+//                     buffer_index = 0;
+//                 }
+//                 token.type = special_type;
+//                 token.value = strdup(&current_char);
+//                 CL_append(tokens, token);
+//                 continue;
+//             }
+//             else if (isspace(current_char))
+//             {
+//                 if (buffer_index > 0)
+//                 {
+//                     buffer[buffer_index] = '\0';
+//                     token.type = TOK_WORD;
+//                     token.value = strdup(buffer);
+//                     CL_append(tokens, token);
+//                     buffer_index = 0;
+//                 }
+//                 continue;
+//             }
+//         }
+
+//         buffer[buffer_index++] = current_char;
+//     }
+
+//     if (buffer_index > 0)
+//     {
+//         Token token;
+//         buffer[buffer_index] = '\0';
+//         if (in_quote)
+//         {
+//             token.type = TOK_QUOTED_WORD;
+//             token.value = strdup(buffer);
+//         }
+//         else
+//         {
+//             token.type = TOK_WORD;
+//             token.value = strdup(buffer);
+//         }
+//         CL_append(tokens, token);
+//     }
+
+//     return tokens;
+// }
+
 CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
 {
     CList tokens = CL_new();
@@ -128,13 +232,27 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
         else if (current_char == '"')
         {
             in_quote = !in_quote;
-            if (!in_quote && buffer_index > 0)
+            if (in_quote)
             {
-                buffer[buffer_index] = '\0';
-                token.type = TOK_QUOTED_WORD;
-                token.value = strdup(buffer);
-                CL_append(tokens, token);
-                buffer_index = 0;
+                if (buffer_index > 0)
+                {
+                    buffer[buffer_index] = '\0';
+                    token.type = TOK_WORD;
+                    token.value = strdup(buffer);
+                    CL_append(tokens, token);
+                    buffer_index = 0;
+                }
+            }
+            else
+            {
+                if (buffer_index > 0)
+                {
+                    buffer[buffer_index] = '\0';
+                    token.type = TOK_QUOTED_WORD;
+                    token.value = strdup(buffer);
+                    CL_append(tokens, token);
+                    buffer_index = 0;
+                }
             }
             continue;
         }
