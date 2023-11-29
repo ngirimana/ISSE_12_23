@@ -15,7 +15,8 @@ typedef enum
     TOK_QUOTED_WORD,
     TOK_LESSTHAN,
     TOK_GREATERTHAN,
-    TOK_PIPE
+    TOK_PIPE,
+    TOK_END
 } TokenType;
 
 typedef struct

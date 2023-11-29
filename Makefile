@@ -1,7 +1,7 @@
 CFLAGS=-Wall -Werror -g -fsanitize=address
 TARGETS=expr_whizz ew_test
-OBJS
-HDRS= pipeline.h token.h tokenize
+OBJS=clist.o expr_tree.o tokenize.o parse.o cdict.o
+HDRS=clist.h expr_tree.h token.h tokenize.h parse.h cdict.h
 LIBS=-lasan -lm -lreadline 
 
 all: $(TARGETS)
