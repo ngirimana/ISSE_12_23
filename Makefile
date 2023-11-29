@@ -1,15 +1,15 @@
 CFLAGS=-Wall -Werror -g -fsanitize=address
-TARGETS=expr_whizz ew_test
-OBJS=clist.o expr_tree.o tokenize.o parse.o cdict.o
-HDRS=clist.h expr_tree.h token.h tokenize.h parse.h cdict.h
+TARGETS=tokenize_test plaidsh
+OBJS=plist.o tokenize.o
+HDRS=plist.h token.h tokenize.h 
 LIBS=-lasan -lm -lreadline 
 
 all: $(TARGETS)
 
-expr_whizz: $(OBJS) expr_whizz.o
+plaidsh: $(OBJS) plaidsh.o
 	gcc $(LDFLAGS) $^ $(LIBS) -o $@
 
-ew_test: $(OBJS) ew_test.o
+tokenize_test: $(OBJS) tokenize_test.o
 	gcc $(LDFLAGS) $^ $(LIBS) -o $@
 
 %.o: %.c $(HDRS)

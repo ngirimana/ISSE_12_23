@@ -25,6 +25,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 2).type == TOK_WORD);
     assert(strcmp(CL_nth(tokens, 2).value, "b") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo a\\ b";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -36,6 +37,7 @@ int test_tokenize_input()
     assert(strcmp(CL_nth(tokens, 1).value, "a b") == 0);
 
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo \"a b\"";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -46,6 +48,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 1).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 1).value, "a b") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo a\\\\ b";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -58,9 +61,10 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 2).type == TOK_WORD);
     assert(strcmp(CL_nth(tokens, 2).value, "b") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo hello|grep \"ell\"";
-    tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
+    tokens = TOK_tokenize_input("echo hello|grep \"ell\"", errmsg, sizeof(errmsg));
     assert(tokens != NULL);
     assert(CL_length(tokens) == 5);
     assert(CL_nth(tokens, 0).type == TOK_WORD);
@@ -73,6 +77,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 4).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 4).value, "ell") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo hello\\|grep \"ell\"";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -85,6 +90,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 2).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 2).value, "ell") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo boo > out_file";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -97,6 +103,8 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 2).type == TOK_GREATERTHAN);
     assert(CL_nth(tokens, 3).type == TOK_WORD);
     assert(strcmp(CL_nth(tokens, 3).value, "out_file") == 0);
+    TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo\"boo\">out_file";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -110,11 +118,14 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 3).type == TOK_WORD);
     assert(strcmp(CL_nth(tokens, 3).value, "out_file") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = " ";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
     assert(tokens != NULL);
     assert(CL_length(tokens) == 0);
+    TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo \"hello | grep\"";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -125,6 +136,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 1).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 1).value, "hello | grep") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     input = "echo a\"bc\"";
     tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
@@ -137,6 +149,7 @@ int test_tokenize_input()
     assert(CL_nth(tokens, 2).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 2).value, "bc") == 0);
     TOK_print(tokens);
+    CL_free(tokens);
 
     return 1;
 }
