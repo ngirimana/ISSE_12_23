@@ -88,111 +88,7 @@ TokenType determineTokenType(char c)
     return TOK_WORD; // If not a special character, default to WORD
 }
 
-// Update the TOK_tokenize_input function
-// CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
-// {
-//     CList tokens = CL_new();
-//     char buffer[MAX_TOKEN_LENGTH];
-//     int buffer_index = 0;
-//     int input_length = strlen(input);
-//     int in_quote = 0;
-//     int escaped = 0;
-
-//     for (int i = 0; i < input_length; ++i)
-//     {
-//         char current_char = input[i];
-//         Token token;
-
-//         if (current_char == '\\' && !escaped)
-//         {
-//             escaped = 1;
-//             continue; // Skip the current character
-//         }
-
-//         if (escaped)
-//         {
-//             escaped = 0;
-//             switch (current_char)
-//             {
-//             case 'n':
-//                 current_char = '\n';
-//                 break;
-//             case 'r':
-//                 current_char = '\r';
-//                 break;
-//             case 't':
-//                 current_char = '\t';
-//                 break;
-//             }
-//         }
-//         else if (current_char == '"')
-//         {
-//             in_quote = !in_quote;
-//             if (!in_quote && buffer_index > 0)
-//             {
-//                 buffer[buffer_index] = '\0';
-//                 token.type = TOK_QUOTED_WORD;
-//                 token.value = strdup(buffer);
-//                 CL_append(tokens, token);
-//                 buffer_index = 0;
-//             }
-//             continue;
-//         }
-//         else if (!in_quote)
-//         {
-//             TokenType special_type = determineTokenType(current_char);
-//             if (special_type != TOK_WORD)
-//             {
-//                 if (buffer_index > 0)
-//                 {
-//                     buffer[buffer_index] = '\0';
-//                     token.type = TOK_WORD;
-//                     token.value = strdup(buffer);
-//                     CL_append(tokens, token);
-//                     buffer_index = 0;
-//                 }
-//                 token.type = special_type;
-//                 token.value = strdup(&current_char);
-//                 CL_append(tokens, token);
-//                 continue;
-//             }
-//             else if (isspace(current_char))
-//             {
-//                 if (buffer_index > 0)
-//                 {
-//                     buffer[buffer_index] = '\0';
-//                     token.type = TOK_WORD;
-//                     token.value = strdup(buffer);
-//                     CL_append(tokens, token);
-//                     buffer_index = 0;
-//                 }
-//                 continue;
-//             }
-//         }
-
-//         buffer[buffer_index++] = current_char;
-//     }
-
-//     if (buffer_index > 0)
-//     {
-//         Token token;
-//         buffer[buffer_index] = '\0';
-//         if (in_quote)
-//         {
-//             token.type = TOK_QUOTED_WORD;
-//             token.value = strdup(buffer);
-//         }
-//         else
-//         {
-//             token.type = TOK_WORD;
-//             token.value = strdup(buffer);
-//         }
-//         CL_append(tokens, token);
-//     }
-
-//     return tokens;
-// }
-
+// Documented in .h file
 CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
 {
     CList tokens = CL_new();
@@ -270,7 +166,21 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer_index = 0;
                 }
                 token.type = special_type;
-                token.value = strdup(&current_char);
+                token.value = malloc(2); // Allocate space for two characters: current_char and null terminator
+                if (token.value == NULL)
+                {
+                    // Handle allocation failure
+                    fprintf(stderr, "Memory allocation failed.\n");
+                    // Clean up and return error handling or exit program
+                    // For simplicity, returning an empty token here
+                    token.type = TOK_WORD;
+                    token.value = strdup("");
+                }
+                else
+                {
+                    token.value[0] = current_char;
+                    token.value[1] = '\0'; // Null terminate the string
+                }
                 CL_append(tokens, token);
                 continue;
             }
