@@ -13,7 +13,7 @@
 #include <ctype.h>
 #include <stddef.h>
 
-#include "plist.h"
+#include "clist.h"
 #include "tokenize.h"
 #include "token.h"
 
@@ -134,7 +134,8 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                 {
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
-                    token.value = strdup(buffer);
+                    strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -145,7 +146,8 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                 {
                     buffer[buffer_index] = '\0';
                     token.type = TOK_QUOTED_WORD;
-                    token.value = strdup(buffer);
+                    strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -161,26 +163,28 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                 {
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
-                    token.value = strdup(buffer);
+                    strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
                 token.type = special_type;
-                token.value = malloc(2); // Allocate space for two characters: current_char and null terminator
-                if (token.value == NULL)
-                {
-                    // Handle allocation failure
-                    fprintf(stderr, "Memory allocation failed.\n");
-                    // Clean up and return error handling or exit program
-                    // For simplicity, returning an empty token here
-                    token.type = TOK_WORD;
-                    token.value = strdup("");
-                }
-                else
-                {
-                    token.value[0] = current_char;
-                    token.value[1] = '\0'; // Null terminate the string
-                }
+                // strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+                // token.value = malloc(2); // Allocate space for two characters: current_char and null terminator
+                // if (token.value == NULL)
+                // {
+                //     // Handle allocation failure
+                //     fprintf(stderr, "Memory allocation failed.\n");
+                //     // Clean up and return error handling or exit program
+                //     // For simplicity, returning an empty token here
+                //     token.type = TOK_WORD;
+                //     token.value = strdup("");
+                // }
+                // else
+                // {
+                token.value[0] = current_char;
+                token.value[1] = '\0'; // Null terminate the string
+                // }
                 CL_append(tokens, token);
                 continue;
             }
@@ -190,7 +194,8 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                 {
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
-                    token.value = strdup(buffer);
+                    strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -208,15 +213,18 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
         if (in_quote)
         {
             token.type = TOK_QUOTED_WORD;
-            token.value = strdup(buffer);
+            strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+            // token.value = strdup(buffer);
         }
         else
         {
             token.type = TOK_WORD;
-            token.value = strdup(buffer);
+            strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
+            // token.value = strdup(buffer);
         }
         CL_append(tokens, token);
     }
+    
 
     return tokens;
 }
@@ -245,7 +253,6 @@ Token TOK_next(CList tokens)
     else
     {
         token.type = TOK_END;
-        token.value = NULL;
     }
     return token;
 }
@@ -271,19 +278,34 @@ void TOK_print(CList tokens)
         switch (token.type)
         {
         case TOK_WORD:
-            printf("WORD “%s”; ", token.value);
+            if (CL_length(tokens) == 1)
+                printf("WORD “%s”", token.value);
+            else
+                printf("WORD “%s”; ", token.value);
             break;
         case TOK_QUOTED_WORD:
-            printf("QUOTED_WORD “%s”; ", token.value);
+            if (CL_length(tokens) == 1)
+                printf("QUOTED_WORD “%s”", token.value);
+            else
+                printf("QUOTED_WORD “%s”; ", token.value);
             break;
         case TOK_LESSTHAN:
-            printf("LESSTHAN;");
+            if (CL_length(tokens) == 1)
+                printf("LESSTHAN");
+            else
+                printf("LESSTHAN;");
             break;
         case TOK_GREATERTHAN:
-            printf("GREATERTHAN;");
+            if (CL_length(tokens) == 1)
+                printf("GREATERTHAN");
+            else
+                printf("GREATERTHAN;");
             break;
         case TOK_PIPE:
-            printf("PIPE;");
+            if (CL_length(tokens) == 1)
+                printf("PIPE");
+            else
+                printf("PIPE;");
             break;
         default:
             break;

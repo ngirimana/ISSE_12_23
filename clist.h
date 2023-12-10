@@ -13,7 +13,7 @@
 #include "token.h"
 
     // The element type for this list
-    typedef Token CListElementType;
+typedef Token CListElementType;
 
 struct _cl_node
 {

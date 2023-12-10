@@ -22,7 +22,7 @@ typedef enum
 typedef struct
 {
     TokenType type;
-    char *value;
+    char value[1024];
 } Token;
 
 #endif /* _TOKEN_H_ */

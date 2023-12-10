@@ -8,7 +8,7 @@
 
 #include "tokenize.h"
 #include "token.h"
-#include "plist.h"
+#include "clist.h"
 
 int test_tokenize_input()
 {
@@ -148,6 +148,17 @@ int test_tokenize_input()
     assert(strcmp(CL_nth(tokens, 1).value, "a") == 0);
     assert(CL_nth(tokens, 2).type == TOK_QUOTED_WORD);
     assert(strcmp(CL_nth(tokens, 2).value, "bc") == 0);
+    TOK_print(tokens);
+    CL_free(tokens);
+
+    input = "echo ab";
+    tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
+    assert(tokens != NULL);
+    assert(CL_length(tokens) == 2);
+    assert(CL_nth(tokens, 0).type == TOK_WORD);
+    assert(strcmp(CL_nth(tokens, 0).value, "echo") == 0);
+    assert(CL_nth(tokens, 1).type == TOK_WORD);
+    assert(strcmp(CL_nth(tokens, 1).value, "ab") == 0);
     TOK_print(tokens);
     CL_free(tokens);
 

@@ -1,7 +1,7 @@
 CFLAGS=-Wall -Werror -g -fsanitize=address
-TARGETS=tokenize_test plaidsh
-OBJS=plist.o tokenize.o
-HDRS=plist.h token.h tokenize.h 
+TARGETS=tokenize_test plaidsh pipeline_test
+OBJS=clist.o tokenize.o pipeline.o parse.o
+HDRS=clist.h token.h tokenize.h pipeline.h parse.h
 LIBS=-lasan -lm -lreadline 
 
 all: $(TARGETS)
@@ -11,7 +11,9 @@ plaidsh: $(OBJS) plaidsh.o
 
 tokenize_test: $(OBJS) tokenize_test.o
 	gcc $(LDFLAGS) $^ $(LIBS) -o $@
-
+pipeline_test: $(OBJS) pipeline_test.o
+	gcc $(LDFLAGS) $^ $(LIBS) -o $@
+	
 %.o: %.c $(HDRS)
 	gcc -c $(CFLAGS) $< -o $@
 
