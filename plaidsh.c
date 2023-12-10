@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
             add_history(input); // Adding input to history
 
             CList tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
+
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
             char *pipeline_string = GetPipelineString(pipeline);
@@ -58,12 +59,31 @@ int main(int argc, char *argv[])
             {
                 // If the input starts with 'cd'
                 char *directory = pipeline_string + 3; // Extract directory path
-                remove_backslashes(directory);         // Remove backslashes
-
-                int change_dir_status = chdir(directory);
-                if (change_dir_status != 0)
+                if (strcmp(directory, "~") == 0)
                 {
-                    perror("chdir");
+                    char *home_dir = getenv("HOME");
+                    if (home_dir != NULL)
+                    {
+                        int change_dir_status = chdir(home_dir);
+                        if (change_dir_status != 0)
+                        {
+                            perror("chdir");
+                        }
+                    }
+                    else
+                    {
+                        printf("HOME environment variable not set.\n");
+                    }
+                }
+                else
+                {
+                    remove_backslashes(directory); // Remove backslashes
+
+                    int change_dir_status = chdir(directory);
+                    if (change_dir_status != 0)
+                    {
+                        perror("chdir");
+                    }
                 }
             }
             else
