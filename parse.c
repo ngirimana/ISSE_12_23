@@ -14,7 +14,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
     if (tokens != NULL)
     {
-        printf("Parsing tokens...\n");
+        // printf("Parsing tokens...\n");
         Token first_token = TOK_next(tokens);
 
         if (TOK_next_type(tokens) == TOK_WORD)
@@ -24,7 +24,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
             TOK_consume(tokens);
             while (TOK_next_type(tokens) != TOK_END)
             {
-                printf("Inside loop.\n");
+                // printf("Inside loop.\n");
                 Token next_token = TOK_next(tokens);
                 if (next_token.type == TOK_WORD)
                 {
@@ -52,10 +52,10 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     if (TOK_next_type(tokens) == TOK_WORD)
                     {
                         new_pipeline = PL_AddCommand(new_pipeline, new_command);
-                        printf("Found PIPE.\n");
+                        // printf("Found PIPE.\n");
 
                         new_command = PL_InitCommand(TOK_next(tokens).value);
-                        printf("pipe#################%s", GetPipelineString(new_pipeline));
+                        // printf("pipe#################%s", GetPipelineString(new_pipeline));
                         TOK_consume(tokens); // Consume the command name token
                     }
                     else
