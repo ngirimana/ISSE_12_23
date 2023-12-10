@@ -169,19 +169,7 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer_index = 0;
                 }
                 token.type = special_type;
-                // strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-                // token.value = malloc(2); // Allocate space for two characters: current_char and null terminator
-                // if (token.value == NULL)
-                // {
-                //     // Handle allocation failure
-                //     fprintf(stderr, "Memory allocation failed.\n");
-                //     // Clean up and return error handling or exit program
-                //     // For simplicity, returning an empty token here
-                //     token.type = TOK_WORD;
-                //     token.value = strdup("");
-                // }
-                // else
-                // {
+                
                 token.value[0] = current_char;
                 token.value[1] = '\0'; // Null terminate the string
                 // }

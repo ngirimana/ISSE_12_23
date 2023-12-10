@@ -14,55 +14,105 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
     if (tokens != NULL)
     {
-        // printf("Parsing tokens...\n");
         Token first_token = TOK_next(tokens);
 
-        if (TOK_next_type(tokens) == TOK_WORD)
+        if (first_token.type == TOK_WORD)
         {
             Command new_command = PL_InitCommand(first_token.value);
-
             TOK_consume(tokens);
+
             while (TOK_next_type(tokens) != TOK_END)
             {
-                // printf("Inside loop.\n");
                 Token next_token = TOK_next(tokens);
-                if (next_token.type == TOK_WORD)
+
+                if (next_token.type == TOK_WORD || next_token.type == TOK_QUOTED_WORD)
                 {
-                    new_command = PL_AddArgument(new_command, next_token.value);
-                    TOK_consume(tokens);
-                }
-                else if (next_token.type == TOK_QUOTED_WORD)
-                {
-                    char *quoted_word = (char *)malloc(strlen(next_token.value) + 3);
-                    if (quoted_word != NULL)
+                    if (next_token.type == TOK_QUOTED_WORD)
                     {
-                        strcpy(quoted_word, "\"");
-                        strcat(quoted_word, next_token.value);
-                        strcat(quoted_word, "\"");
-                        new_command = PL_AddArgument(new_command, quoted_word);
-                        free(quoted_word); // Free dynamically allocated memory
+                        // Handle quoted word
+                        char *quoted_word = (char *)malloc(strlen(next_token.value) + 3);
+                        if (quoted_word != NULL)
+                        {
+                            strcpy(quoted_word, "\"");
+                            strcat(quoted_word, next_token.value);
+                            strcat(quoted_word, "\"");
+                            new_command = PL_AddArgument(new_command, quoted_word);
+                            free(quoted_word);
+                        }
+                    }
+                    else
+                    {
+                        // Handle regular word
+                        new_command = PL_AddArgument(new_command, next_token.value);
                     }
                     TOK_consume(tokens);
+                }
+                else if (next_token.type == TOK_LESSTHAN || next_token.type == TOK_GREATERTHAN)
+                {
+                    printf("Redirect\n");
+                    // Handle redirection
+                    char *redirect_symbol = (next_token.type == TOK_LESSTHAN) ? "<" : ">";
+                    TOK_consume(tokens);
+
+                    if (TOK_next_type(tokens) == TOK_WORD || TOK_next_type(tokens) == TOK_QUOTED_WORD)
+                    {
+                        char *file_name = (char *)malloc(strlen(TOK_next(tokens).value) + 3);
+                        if (file_name != NULL)
+                        {
+                            strcpy(file_name, redirect_symbol);
+
+                            if (TOK_next_type(tokens) == TOK_QUOTED_WORD)
+                            {
+                                strcat(file_name, "\"");
+                            }
+
+                            strcat(file_name, TOK_next(tokens).value);
+
+                            if (TOK_next_type(tokens) == TOK_QUOTED_WORD)
+                            {
+                                strcat(file_name, "\"");
+                            }
+
+                            new_command = PL_AddArgument(new_command, file_name);
+
+                            free(file_name);
+                        }
+                        TOK_consume(tokens);
+                    }
+                    else
+                    {
+                        printf("Expect filename after redirection\n");
+                        // Handle the error condition or exit the loop
+                        // For instance, break; or return an error code
+                        break;
+                    }
                 }
 
                 else if (next_token.type == TOK_PIPE)
                 {
-                    TOK_consume(tokens); // Consume the pipe token
-
-                    if (TOK_next_type(tokens) == TOK_WORD)
+                    // Handle pipe
+                    TOK_consume(tokens);
+                    if (TOK_next_type(tokens) == TOK_PIPE)
+                    {
+                        printf("No command specified\n");
+                    }
+                    else if (TOK_next_type(tokens) == TOK_WORD)
                     {
                         new_pipeline = PL_AddCommand(new_pipeline, new_command);
-                        // printf("Found PIPE.\n");
-
                         new_command = PL_InitCommand(TOK_next(tokens).value);
-                        // printf("pipe#################%s", GetPipelineString(new_pipeline));
-                        TOK_consume(tokens); // Consume the command name token
+                        TOK_consume(tokens);
                     }
                     else
                     {
-                        printf("Error: Expected command after pipe.\n");
+                        printf("No command specified\n");
                         // Handle the error condition
                     }
+                }
+                else
+                {
+                    // Handle unrecognized token type
+                    printf("Error: Unrecognized token type.\n");
+                    break; // Break the loop in case of unrecognized token type
                 }
             }
 
@@ -74,8 +124,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
         }
         else
         {
-            sprintf(errmsg, "Invalid start token: %s!, Linux command always start by word ", CL_nth(tokens, 0).value);
-            printf("Error: %s\n", errmsg);
+            printf("No command specified\n");
         }
     }
     return new_pipeline;

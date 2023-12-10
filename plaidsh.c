@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
             add_history(input); // Adding input to history
 
             CList tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
+            // TOK_print(tokens); // Printing tokens (for debugging)
 
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
@@ -112,6 +113,9 @@ int main(int argc, char *argv[])
                     }
                 }
             }
+            free(pipeline_string);
+            CL_free(tokens);
+            PipelineFree(pipeline);
         }
 
         free(input);
