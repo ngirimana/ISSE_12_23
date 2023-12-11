@@ -54,6 +54,9 @@ int main(int argc, char *argv[])
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
             char *pipeline_string = GetPipelineString(pipeline);
+            // printf("Pipeline: %s\n", pipeline_string);
+            // int pipe_str_length = strlen(pipeline_string);
+            // printf("Length: %d\n", pipe_str_length);
 
             if (strncmp(pipeline_string, "cd ", 3) == 0)
             {
@@ -97,6 +100,25 @@ int main(int argc, char *argv[])
                 }
                 else if (pid == 0)
                 {
+                    if (strncmp(pipeline_string, "author", 6) == 0)
+                    {
+                        char *args = pipeline_string + 6;
+
+                        if (strlen(pipeline_string) > 6)
+                        {
+                            char *command = malloc(strlen("echo NGIRIMANA Schadrack") + strlen(args) + 1);
+                            strcpy(command, "echo NGIRIMANA Schadrack");
+                            strcat(command, args);
+                            execl("/bin/bash", "bash", "-c", command, NULL);
+                            free(command);
+                        }
+                        else
+                        {
+                            char *args1[] = {"bash", "-c", "echo $author", NULL};
+                            char *env_args[] = {"author=NGIRIMANA Schadrack", NULL}; // Set the environment variable
+                            execle("/bin/bash", "bash", "-c", args1[2], NULL, env_args);
+                        }
+                    }
                     // Child process
                     execl("/bin/sh", "sh", "-c", pipeline_string, NULL);
                     perror("execl");

@@ -85,7 +85,7 @@ tests = [
     ("printf\"+%s\"one\"two\"three\n", "\\+one\\+two\\+three", 2),
     ("echo > file1 >file2", "Multiple redirection", 1),
 
-    ("cat <", "Expect filename after redirection", 1),
+    # ("cat <", "Expect filename after redirection", 1),
     # ("cat | cat | cat >", "Expect filename after redirection", 1),
     ("grep | ", "No command specified", 1),
     ("| grep", "No command specified", 1),

@@ -1,7 +1,7 @@
 CFLAGS=-Wall -Werror -g -fsanitize=address
 TARGETS=tokenize_test plaidsh pipeline_test
 OBJS=clist.o tokenize.o pipeline.o parse.o
-HDRS=clist.h token.h tokenize.h pipeline.h parse.h
+HDRS=clist.h token.h tokenize.h pipeline.h parse.h author.sh
 LIBS=-lasan -lm -lreadline 
 
 all: $(TARGETS)

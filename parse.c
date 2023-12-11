@@ -16,8 +16,9 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
     {
         Token first_token = TOK_next(tokens);
 
-        if (first_token.type == TOK_WORD)
+        if (first_token.type == TOK_WORD || first_token.type == TOK_QUOTED_WORD)
         {
+            
             Command new_command = PL_InitCommand(first_token.value);
             TOK_consume(tokens);
 
@@ -47,13 +48,14 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     }
                     TOK_consume(tokens);
                 }
+
                 else if (next_token.type == TOK_LESSTHAN || next_token.type == TOK_GREATERTHAN)
                 {
                     printf("Redirect\n");
-                    // Handle redirection
                     char *redirect_symbol = (next_token.type == TOK_LESSTHAN) ? "<" : ">";
                     TOK_consume(tokens);
 
+                    // Check if there are enough tokens left to process
                     if (TOK_next_type(tokens) == TOK_WORD || TOK_next_type(tokens) == TOK_QUOTED_WORD)
                     {
                         char *file_name = (char *)malloc(strlen(TOK_next(tokens).value) + 3);
@@ -61,6 +63,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                         {
                             strcpy(file_name, redirect_symbol);
 
+                            // Add quotes if the next token is a quoted word
                             if (TOK_next_type(tokens) == TOK_QUOTED_WORD)
                             {
                                 strcat(file_name, "\"");
@@ -68,6 +71,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
                             strcat(file_name, TOK_next(tokens).value);
 
+                            // Add closing quotes if necessary
                             if (TOK_next_type(tokens) == TOK_QUOTED_WORD)
                             {
                                 strcat(file_name, "\"");
@@ -81,9 +85,10 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     }
                     else
                     {
+                        // Handle the case where a filename is expected after redirection
                         printf("Expect filename after redirection\n");
                         // Handle the error condition or exit the loop
-                        // For instance, break; or return an error code
+                        // For instance, returning an error code or breaking the loop
                         break;
                     }
                 }
@@ -118,8 +123,6 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
             // Add the last constructed command to the pipeline outside the loop
             new_pipeline = PL_AddCommand(new_pipeline, new_command);
-
-            printf("%d\n", PipelineLength(new_pipeline));
             return new_pipeline;
         }
         else
