@@ -18,7 +18,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
         if (first_token.type == TOK_WORD || first_token.type == TOK_QUOTED_WORD)
         {
-            
+
             Command new_command = PL_InitCommand(first_token.value);
             TOK_consume(tokens);
 
@@ -55,6 +55,12 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     char *redirect_symbol = (next_token.type == TOK_LESSTHAN) ? "<" : ">";
                     TOK_consume(tokens);
 
+                    if (TOK_next_type(tokens) == TOK_END)
+                    {
+                        new_command = PL_AddArgument(new_command, redirect_symbol);
+                        printf("Expect filename after redirection\n");
+                    }
+
                     // Check if there are enough tokens left to process
                     if (TOK_next_type(tokens) == TOK_WORD || TOK_next_type(tokens) == TOK_QUOTED_WORD)
                     {
@@ -82,14 +88,6 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                             free(file_name);
                         }
                         TOK_consume(tokens);
-                    }
-                    else
-                    {
-                        // Handle the case where a filename is expected after redirection
-                        printf("Expect filename after redirection\n");
-                        // Handle the error condition or exit the loop
-                        // For instance, returning an error code or breaking the loop
-                        break;
                     }
                 }
 
