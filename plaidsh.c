@@ -49,20 +49,16 @@ int main(int argc, char *argv[])
             add_history(input); // Adding input to history
 
             CList tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
-            // TOK_print(tokens); // Printing tokens (for debugging)
 
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
             char *pipeline_string = GetPipelineString(pipeline);
-            // printf("Pipeline: %s\n", pipeline_string);
-            // int pipe_str_length = strlen(pipeline_string);
-            // printf("Length: %d\n", pipe_str_length);
 
             if (strncmp(pipeline_string, "cd ", 3) == 0)
             {
                 // If the input starts with 'cd'
                 char *directory = pipeline_string + 3; // Extract directory path
-                if (strcmp(directory, "~") == 0)
+                if (strcmp(directory, "~") == 0 || strcmp(pipeline_string, "cd ") == 0)
                 {
                     char *home_dir = getenv("HOME");
                     if (home_dir != NULL)

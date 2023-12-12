@@ -51,7 +51,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
                 else if (next_token.type == TOK_LESSTHAN || next_token.type == TOK_GREATERTHAN)
                 {
-                    printf("Redirect\n");
+
                     char *redirect_symbol = (next_token.type == TOK_LESSTHAN) ? "<" : ">";
                     TOK_consume(tokens);
 
