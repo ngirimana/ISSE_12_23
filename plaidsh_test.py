@@ -17,7 +17,7 @@ prompt_re = "#\?.* "
 initial_cwd = os.getcwd()
 
 # find the setup_playground script by searching these directories in order
-script_path = ['.', './']
+script_path = ['.', '/var/local/isse-12']
 for s in script_path:
     setup_script = os.path.join(s, "setup_playground.sh")
     if (os.path.exists(setup_script)):
@@ -84,7 +84,6 @@ tests = [
      "wc -l", "24", 2),
     ("printf\"+%s\"one\"two\"three\n", "\\+one\\+two\\+three", 2),
     ("echo > file1 >file2", "Multiple redirection", 1),
-
     ("cat <", "Expect filename after redirection", 1),
     ("cat | cat | cat >", "Expect filename after redirection", 1),
     ("grep | ", "No command specified", 1),

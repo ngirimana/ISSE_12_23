@@ -123,8 +123,15 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
             case 't':
                 current_char = '\t';
                 break;
+
             default:
-                printf("Illegal escape character %c\n", current_char);
+
+                buffer[buffer_index++] = '\\'; // Add the escaped character back
+                if (current_char != '<' && current_char != '>' && current_char != '|')
+                {
+                    printf("Illegal escape character %c\n", current_char);
+                }
+                break;
             }
         }
         else if (current_char == '"')
