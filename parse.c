@@ -86,6 +86,10 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                             new_command = PL_AddArgument(new_command, file_name);
 
                             free(file_name);
+                            if (TOK_next_type(tokens) != TOK_GREATERTHAN)
+                            {
+                                printf("Multiple redirection\n");
+                            }
                         }
                         TOK_consume(tokens);
                     }

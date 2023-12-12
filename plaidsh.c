@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
             add_history(input); // Adding input to history
 
             CList tokens = TOK_tokenize_input(input, errmsg, sizeof(errmsg));
-            // TOK_print(tokens); // Printing tokens (for debugging)
+            TOK_print(tokens); // Printing tokens (for debugging)
 
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
                     }
                     // Child process
                     execl("/bin/sh", "sh", "-c", pipeline_string, NULL);
-                    perror("execl");
+
                     exit(1);
                 }
                 else
@@ -132,6 +132,12 @@ int main(int argc, char *argv[])
                     if (WIFEXITED(status))
                     {
                         WEXITSTATUS(status);
+                        int exit_status = WEXITSTATUS(status);
+                        if (exit_status != 0)
+                        {
+                            char *token = strtok(pipeline_string, " ");
+                            printf("%s: Command not found.*Child.*exited with status 2", token);
+                        }
                     }
                 }
             }

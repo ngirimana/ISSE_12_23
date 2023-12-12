@@ -1,5 +1,0 @@
-bash
-csh
-tcsh
-plaidsh
-sh
