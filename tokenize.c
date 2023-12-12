@@ -135,7 +135,6 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
                     strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -147,7 +146,6 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer[buffer_index] = '\0';
                     token.type = TOK_QUOTED_WORD;
                     strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -164,15 +162,14 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
                     strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
                 token.type = special_type;
-                
+
                 token.value[0] = current_char;
                 token.value[1] = '\0'; // Null terminate the string
-                // }
+
                 CL_append(tokens, token);
                 continue;
             }
@@ -183,7 +180,6 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
                     buffer[buffer_index] = '\0';
                     token.type = TOK_WORD;
                     strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-                    // token.value = strdup(buffer);
                     CL_append(tokens, token);
                     buffer_index = 0;
                 }
@@ -200,19 +196,16 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
         buffer[buffer_index] = '\0';
         if (in_quote)
         {
-            token.type = TOK_QUOTED_WORD;
-            strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-            // token.value = strdup(buffer);
+            printf("Unterminated quote\n");
+            token.type = TOK_END;
         }
         else
         {
             token.type = TOK_WORD;
             strncpy(token.value, buffer, MAX_TOKEN_LENGTH);
-            // token.value = strdup(buffer);
         }
         CL_append(tokens, token);
     }
-    
 
     return tokens;
 }
