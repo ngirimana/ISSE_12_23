@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
         if (input == NULL || strcasecmp(input, "quit") == 0 || strcasecmp(input, "exit") == 0)
         {
-            exit(1);
+            exit(0);
         }
         if (input && *input)
         {
@@ -96,6 +96,16 @@ int main(int argc, char *argv[])
                 }
                 else if (pid == 0)
                 {
+                    if (strncmp(pipeline_string, "quit", 5) == 0)
+                    {
+                        char *args[] = {"quit", NULL};
+                        execvp("quit", args);
+                    }
+                    if (strncmp(pipeline_string, "exit", 5) == 0)
+                    {
+                        char *args[] = {"exit", NULL};
+                        execvp("exit", args);
+                    }
                     if (strncmp(pipeline_string, "author", 6) == 0)
                     {
                         char *args = pipeline_string + 6;
