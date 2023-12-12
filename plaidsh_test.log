@@ -1,0 +1,122 @@
+Welcome to Plaid Shell!
+#? 
+#?     
+No command specified
+#?   \  
+Illegal escape character  
+sh: 1:  : not found
+\: Command not found.*Child.*exited with status 2#? pwd
+/home/pico/Documents/ISSE/Assignment/12
+#? ls --color
+ clist.c    pipeline.c        plaidsh.c                 token.h
+ clist.h    pipeline.h       [0m[01;34m'Plaid Shell Playground'[0m   tokenize.c
+ clist.o    pipeline.o        plaidsh.o                 tokenize.h
+ Makefile   [01;32mpipeline_test[0m     plaidsh_test.log          tokenize.o
+ parse.c    pipeline_test.c   [01;32mplaidsh_test.py[0m           [01;32mtokenize_test[0m
+ parse.h    pipeline_test.o   README.md                 tokenize_test.c
+ parse.o    [01;32mplaidsh[0m           [01;32msetup_playground.sh[0m       tokenize_test.o
+#? ./setup_playground.sh
+Plaid Shell playground created...
+#? cd Plaid\ Shell\ Playground
+Illegal escape character  
+Illegal escape character  
+#? pwd
+/home/pico/Documents/ISSE/Assignment/12/Plaid Shell Playground
+#? ls
+'best sitcoms.txt'   README  'seven dwarfs.txt'   shells.txt
+#? ls *.txt
+'best sitcoms.txt'  'seven dwarfs.txt'	 shells.txt
+#? echo $PATH
+/home/pico/.nvm/versions/node/v20.9.0/bin:/home/pico/.bun/bin:/home/pico/.cache/cloud-code/installer/google-cloud-sdk/bin:/home/pico/istio-1.19.3/bin:/home/pico/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+#? author
+NGIRIMANA Schadrack
+#? author | sed -e "s/^/Written by /"
+Written by NGIRIMANA Schadrack
+#? grep Happy *.txt
+best sitcoms.txt:Happy Days
+seven dwarfs.txt:Happy
+#? cat "best sitcoms.txt" | grep Seinfeld
+Seinfeld
+#? cat "best sitcoms.txt"|grep Seinfeld|wc -l
+1
+#? sed -ne "s/The Simpsons/I Love Lucy/p" < best\ sitcoms.txt > output
+Illegal escape character  
+Multiple redirection
+Multiple redirection
+#? ls -l
+total 20
+-rw-rw-r-- 1 pico pico 142 Uku 12 21:41 'best sitcoms.txt'
+-rw-rw-r-- 1 pico pico  12 Uku 12 21:41  output
+-rw-rw-r-- 1 pico pico  64 Uku 12 21:41  README
+-rw-rw-r-- 1 pico pico  45 Uku 12 21:41 'seven dwarfs.txt'
+-rw-rw-r-- 1 pico pico  25 Uku 12 21:41  shells.txt
+#? cat output
+I Love Lucy
+#? this is not a command
+sh: 1: this: not found
+this: Command not found.*Child.*exited with status 2#? echo Hello > /usr/bin/cant_write
+Multiple redirection
+sh: 1: cannot create /usr/bin/cant_write: Permission denied
+echo: Command not found.*Child.*exited with status 2#? cd
+#? pwd
+/home/pico
+#? cd /home/pico/Documents/ISSE/Assignment/12
+#? pwd
+/home/pico/Documents/ISSE/Assignment/12
+#? cd ~
+#? pwd
+/home/pico
+#? echo "Operator could you help me place this call?"
+Operator could you help me place this call?
+#? seq 10 | wc"-l"
+10
+#? seq 10 | wc"-l"[C[C[Cecho "Operator could you help me place this call?"
+Operator could you help me place this call?
+#? env|grep PATH
+LOCPATH_VSCODE_SNAP_ORIG=
+GTK_PATH=/snap/code/147/usr/lib/x86_64-linux-gnu/gtk-3.0
+WINDOWPATH=2
+PATH=/home/pico/.nvm/versions/node/v20.9.0/bin:/home/pico/.bun/bin:/home/pico/.cache/cloud-code/installer/google-cloud-sdk/bin:/home/pico/istio-1.19.3/bin:/home/pico/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+LOCPATH=/snap/code/147/usr/lib/locale
+ISTIOPATH=/home/pico/istio-1.19.3
+GTK_PATH_VSCODE_SNAP_ORIG=
+#? echo Hello World | cat -n | cat -n | cat -n
+     1	     1	     1	Hello World
+#? echo \c
+Illegal escape character c
+c
+#? echo "\c"
+Illegal escape character c
+#? echo "hi
+Unterminated quote
+
+#? echo "|1|2|3|" | sed -e "s/[0-9]//"
+||2|3|
+#? printf "=%s=\n" one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one twenty-two twenty-three twenty-four|wc -l
+24
+#? printf"+%s"one"two"three
++one+two+three#? 
+#? echo > file1 >file2
+Multiple redirection
+Multiple redirection
+#? cat <
+Expect filename after redirection
+sh: 1: Syntax error: end of file unexpected
+cat: Command not found.*Child.*exited with status 2#? cat | cat | cat >
+Expect filename after redirection
+sh: 1: Syntax error: end of file unexpected
+cat: Command not found.*Child.*exited with status 2#? grep | 
+No command specified
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+grep: Command not found.*Child.*exited with status 2#? | grep
+No command specified
+#? echo || grep
+No command specified
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+echo: Command not found.*Child.*exited with status 2#? echo \<\|\> | cat
+<|>
+#? echo hello\|grep ell
+hello|grep ell
+#? exit

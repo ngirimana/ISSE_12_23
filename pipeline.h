@@ -3,8 +3,8 @@
 
 #include <stdio.h>
 
-#define MAX_ARGS 10
-#define MAX_COMMANDS 10
+#define MAX_ARGS 100
+#define MAX_COMMANDS 100
 #define MAX_FILENAME_LENGTH 1024
 
 typedef struct _command *Command;

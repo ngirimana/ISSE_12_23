@@ -12,6 +12,8 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 {
     Pipeline new_pipeline = PL_New();
 
+    // TOK_print(tokens);
+
     if (tokens != NULL)
     {
         Token first_token = TOK_next(tokens);
@@ -21,9 +23,11 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
 
             Command new_command = PL_InitCommand(first_token.value);
             TOK_consume(tokens);
+            // int i = 0;
 
             while (TOK_next_type(tokens) != TOK_END)
             {
+                // printf("i: %d\n", i);
                 Token next_token = TOK_next(tokens);
 
                 if (next_token.type == TOK_WORD || next_token.type == TOK_QUOTED_WORD)
@@ -121,6 +125,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     printf("Error: Unrecognized token type.\n");
                     break; // Break the loop in case of unrecognized token type
                 }
+                // i++;
             }
 
             // Add the last constructed command to the pipeline outside the loop

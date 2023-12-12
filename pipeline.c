@@ -142,6 +142,7 @@ char *GetCommandString(Command command)
                 }
             }
         }
+        
         return command_string;
     }
     return NULL;
