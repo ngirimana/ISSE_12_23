@@ -1,3 +1,12 @@
+
+/*
+ * parse.c
+ *
+ * Functions to parse a list of tokens into a pipeline of commands
+ *
+ * Author: Ngirimana Schadrack <schadran@andrew.cmu.edu>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
-            char *pipeline_string = GetPipelineString(pipeline);
+            char *pipeline_string = PL_GetPipelineString(pipeline);
 
             if (strncmp(pipeline_string, "cd ", 3) == 0)
             {
@@ -132,16 +132,7 @@ int main(int argc, char *argv[])
                 }
                 else if (pid == 0)
                 {
-                    if (strncmp(pipeline_string, "quit", 5) == 0)
-                    {
-                        char *args[] = {"quit", NULL};
-                        execvp("quit", args);
-                    }
-                    if (strncmp(pipeline_string, "exit", 5) == 0)
-                    {
-                        char *args[] = {"exit", NULL};
-                        execvp("exit", args);
-                    }
+
                     if (strncmp(pipeline_string, "author", 6) == 0)
                     {
                         char *args = pipeline_string + 6;
@@ -185,7 +176,7 @@ int main(int argc, char *argv[])
             }
             free(pipeline_string);
             CL_free(tokens);
-            PipelineFree(pipeline);
+            PL_Free(pipeline);
         }
 
         free(input);

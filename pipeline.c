@@ -1,3 +1,11 @@
+/*
+ * pipeline.c
+ *
+ * Functions to manipulate a pipeline of commands
+ *
+ * Author: Ngirimana Schadrack <schadran@andrew.cmu.edu>
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
@@ -113,43 +121,7 @@ Pipeline PL_AddCommand(Pipeline pipeline, Command command)
     return pipeline;
 }
 
-void SetInputFile(Pipeline pipeline, const char *filename)
-{
-    if (pipeline != NULL && filename != NULL)
-    {
-        strncpy(pipeline->input_file, filename, MAX_FILENAME_LENGTH - 1);
-        pipeline->input_file[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
-    }
-}
-
-void SetOutputFile(Pipeline pipeline, const char *filename)
-{
-    if (pipeline != NULL && filename != NULL)
-    {
-        strncpy(pipeline->output_file, filename, MAX_FILENAME_LENGTH - 1);
-        pipeline->output_file[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
-    }
-}
-
-char *GetInputFile(Pipeline pipeline)
-{
-    if (pipeline != NULL)
-    {
-        return pipeline->input_file;
-    }
-    return NULL;
-}
-
-char *GetOutputFile(Pipeline pipeline)
-{
-    if (pipeline != NULL)
-    {
-        return pipeline->output_file;
-    }
-    return NULL;
-}
-
-char *GetCommandString(Command command)
+char *PL_GetCommandString(Command command)
 {
     if (command != NULL)
     {
@@ -170,7 +142,7 @@ char *GetCommandString(Command command)
     return NULL;
 }
 
-char *GetPipelineString(Pipeline pipeline)
+char *PL_GetPipelineString(Pipeline pipeline)
 {
     if (pipeline != NULL)
     {
@@ -181,7 +153,7 @@ char *GetPipelineString(Pipeline pipeline)
             CommandNode *current = pipeline->head;
             while (current != NULL)
             {
-                char *command_string = GetCommandString(&current->data);
+                char *command_string = PL_GetCommandString(&current->data);
                 strncat(pipeline_string, command_string, MAX_FILENAME_LENGTH - strlen(pipeline_string) - 1);
                 free(command_string);
                 current = current->next;
@@ -196,7 +168,7 @@ char *GetPipelineString(Pipeline pipeline)
     return NULL;
 }
 
-void CommandFree(Command command)
+void PL_CommandFree(Command command)
 {
     if (command != NULL)
     {
@@ -208,7 +180,7 @@ void CommandFree(Command command)
     }
 }
 
-void PipelineFree(Pipeline pipeline)
+void PL_Free(Pipeline pipeline)
 {
     if (pipeline != NULL)
     {
@@ -227,7 +199,7 @@ void PipelineFree(Pipeline pipeline)
     }
 }
 
-int PipelineLength(Pipeline pipeline)
+int PL_Length(Pipeline pipeline)
 {
     if (pipeline != NULL)
     {

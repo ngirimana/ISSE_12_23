@@ -1,7 +1,7 @@
 /*
  * clist.h
  *
- * Linked list implementation for ISSE Assignment 5
+ * Linked list implementation for ISSE Assignment 12
  *
  * Author: Ngirimana Schadrack <schadran@andrew.cmu.edu>
  *
