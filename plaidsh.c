@@ -30,6 +30,42 @@ void remove_backslashes(char *str)
     str[j] = '\0';
 }
 
+void compareStrings(char *str1, char *str2)
+{
+    int i;
+    for (i = 0; str1[i] != '\0' && str2[i] != '\0'; i++)
+    {
+        if (str1[i] != str2[i])
+        {
+            printf("Difference found at index %d: '%c' in the first string and '%c' in the second string\n", i, str1[i], str2[i]);
+            return;
+        }
+    }
+
+    if (str1[i] == '\0' && str2[i] == '\0')
+    {
+        printf("Strings are identical\n");
+    }
+    else
+    {
+        printf("Difference found at index %d: End of string reached for one of the strings\n", i);
+    }
+}
+
+void removeLastCharacter(char *str)
+{
+    if (str == NULL || str[0] == '\0')
+    {
+        return; // Handle empty string or NULL pointer
+    }
+
+    int len = strlen(str);
+    if (len > 0)
+    {
+        str[len - 1] = '\0';
+    }
+}
+
 int main(int argc, char *argv[])
 {
     char *input = NULL;
@@ -76,8 +112,8 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    remove_backslashes(directory); // Remove backslashes
-
+                    remove_backslashes(directory);  // Remove backslashes
+                    removeLastCharacter(directory); // Remove trailing newline character
                     int change_dir_status = chdir(directory);
                     if (change_dir_status != 0)
                     {

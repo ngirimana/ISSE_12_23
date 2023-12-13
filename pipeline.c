@@ -10,13 +10,23 @@ struct _command
     int num_arguments;
 };
 
+typedef struct _command_node
+{
+    struct _command_node *next;
+    struct _command data;
+} CommandNode;
+
+typedef CommandNode *CommandList;
+
 struct _pipeline
 {
-    Command commands[MAX_COMMANDS];
+    CommandList head; // Renamed from commands to head for the linked list of commands
     char input_file[MAX_FILENAME_LENGTH];
     char output_file[MAX_FILENAME_LENGTH];
     int num_commands;
 };
+
+// typedef struct _pipeline *Pipeline;
 
 Pipeline PL_New()
 {
@@ -24,20 +34,17 @@ Pipeline PL_New()
     if (new_pipeline != NULL)
     {
         new_pipeline->num_commands = 0;
-        for (int i = 0; i < MAX_COMMANDS; ++i)
-        {
-            memset(&new_pipeline->commands[i], 0, sizeof(struct _command));
-        }
+        new_pipeline->head = NULL; // Initialize head as an empty linked list
         new_pipeline->input_file[0] = '\0';
         new_pipeline->output_file[0] = '\0';
     }
     return new_pipeline;
 }
 
-Command PL_New_Command()
+Command PL_InitCommand(const char *executable)
 {
     Command new_command = (Command)malloc(sizeof(struct _command));
-    assert(new_command);
+    // assert(new_command);
 
     new_command->num_arguments = 0;
     for (int i = 0; i < MAX_ARGS; ++i)
@@ -45,46 +52,64 @@ Command PL_New_Command()
         new_command->arguments[i] = NULL;
     }
 
-    return new_command;
-}
-
-Command PL_InitCommand(const char *executable)
-{
-    Command new_command = PL_New_Command();
-    if (new_command != NULL && executable != NULL)
+    if (executable != NULL)
     {
         strncpy(new_command->command, executable, MAX_FILENAME_LENGTH - 1);
         new_command->command[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
     }
+
     return new_command;
 }
 
 Command PL_AddArgument(Command command, const char *argument)
 {
-    if (command == NULL || command->num_arguments >= MAX_ARGS || argument == NULL)
+    if (command == NULL || argument == NULL)
     {
         return command;
     }
 
     size_t arg_len = strlen(argument);
-    command->arguments[command->num_arguments] = (char *)malloc(arg_len + 1);
-    if (command->arguments[command->num_arguments] != NULL)
+    char *new_arg = (char *)malloc(arg_len + 1);
+    if (new_arg != NULL)
     {
-        strncpy(command->arguments[command->num_arguments], argument, arg_len);
-        command->arguments[command->num_arguments][arg_len] = '\0';
-        command->num_arguments++;
+        strncpy(new_arg, argument, arg_len);
+        new_arg[arg_len] = '\0';
+        command->arguments[command->num_arguments++] = new_arg;
     }
+    // free(new_arg);
     return command;
 }
 
 Pipeline PL_AddCommand(Pipeline pipeline, Command command)
 {
-    if (command == NULL || pipeline->num_commands >= MAX_COMMANDS)
+    if (command == NULL || pipeline == NULL)
     {
         return pipeline;
     }
 
-    pipeline->commands[pipeline->num_commands++] = command;
+    CommandNode *new_node = (CommandNode *)malloc(sizeof(CommandNode));
+    if (new_node != NULL)
+    {
+        new_node->data = *command;
+        new_node->next = NULL; // Set the 'next' pointer to NULL for the new node
+        if (pipeline->head == NULL)
+        {
+            pipeline->head = new_node;
+        }
+        else
+        {
+            CommandNode *temp = pipeline->head;
+            while (temp->next != NULL)
+            {
+                temp = temp->next;
+            }
+            temp->next = new_node;
+        }
+
+        pipeline->num_commands++;
+    }
+    free(command);
+
     return pipeline;
 }
 
@@ -105,6 +130,7 @@ void SetOutputFile(Pipeline pipeline, const char *filename)
         pipeline->output_file[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
     }
 }
+
 char *GetInputFile(Pipeline pipeline)
 {
     if (pipeline != NULL)
@@ -131,18 +157,14 @@ char *GetCommandString(Command command)
         if (command_string != NULL)
         {
             strncpy(command_string, command->command, MAX_FILENAME_LENGTH - 1);
+            command_string[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
             strncat(command_string, " ", MAX_FILENAME_LENGTH - 1);
             for (int i = 0; i < command->num_arguments; ++i)
             {
-
                 strncat(command_string, command->arguments[i], MAX_FILENAME_LENGTH - strlen(command_string) - 1);
-                if (i < command->num_arguments - 1)
-                {
-                    strcat(command_string, " "); // Add a space if it's not the last argument
-                }
+                strncat(command_string, " ", MAX_FILENAME_LENGTH - strlen(command_string) - 1);
             }
         }
-        
         return command_string;
     }
     return NULL;
@@ -156,14 +178,16 @@ char *GetPipelineString(Pipeline pipeline)
         if (pipeline_string != NULL)
         {
             pipeline_string[0] = '\0';
-            for (int i = 0; i < pipeline->num_commands; ++i)
+            CommandNode *current = pipeline->head;
+            while (current != NULL)
             {
-                char *command_string = GetCommandString(pipeline->commands[i]);
+                char *command_string = GetCommandString(&current->data);
                 strncat(pipeline_string, command_string, MAX_FILENAME_LENGTH - strlen(pipeline_string) - 1);
                 free(command_string);
-                if (i < pipeline->num_commands - 1)
+                current = current->next;
+                if (current != NULL)
                 {
-                    strcat(pipeline_string, "|"); // Add a space if it's not the last argument
+                    strcat(pipeline_string, "|");
                 }
             }
         }
@@ -188,9 +212,16 @@ void PipelineFree(Pipeline pipeline)
 {
     if (pipeline != NULL)
     {
-        for (int i = 0; i < pipeline->num_commands; ++i)
+        CommandNode *current = pipeline->head;
+        while (current != NULL)
         {
-            CommandFree(pipeline->commands[i]);
+            CommandNode *temp = current;
+            current = current->next;
+            for (int i = 0; i < temp->data.num_arguments; ++i)
+            {
+                free(temp->data.arguments[i]);
+            }
+            free(temp);
         }
         free(pipeline);
     }
