@@ -207,6 +207,7 @@ CList TOK_tokenize_input(const char *input, char *errmsg, size_t errmsg_sz)
         {
             printf("Unterminated quote\n");
             token.type = TOK_END;
+            
         }
         else
         {

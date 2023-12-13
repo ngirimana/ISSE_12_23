@@ -89,7 +89,6 @@ int main(int argc, char *argv[])
             Pipeline pipeline = Parse(tokens, errmsg, sizeof(errmsg));
 
             char *pipeline_string = GetPipelineString(pipeline);
-            printf("Pipeline: %s\n", pipeline_string);
 
             if (strncmp(pipeline_string, "cd ", 3) == 0)
             {

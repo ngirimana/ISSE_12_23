@@ -63,6 +63,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                     {
                         new_command = PL_AddArgument(new_command, redirect_symbol);
                         printf("Expect filename after redirection\n");
+                        // return NULL;
                     }
 
                     // Check if there are enough tokens left to process
@@ -123,6 +124,7 @@ Pipeline Parse(CList tokens, char *errmsg, size_t errmsg_sz)
                 {
                     // Handle unrecognized token type
                     printf("Error: Unrecognized token type.\n");
+
                     break; // Break the loop in case of unrecognized token type
                 }
                 // i++;

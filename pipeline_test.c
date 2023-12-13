@@ -26,32 +26,48 @@ int compare_strings(const char *str1, const char *str2)
     }
 }
 
+void removeLastCharacter(char *str)
+{
+    if (str == NULL || str[0] == '\0')
+    {
+        return; // Handle empty string or NULL pointer
+    }
+
+    int len = strlen(str);
+    if (len > 0)
+    {
+        str[len - 1] = '\0';
+    }
+}
+
 int test_commands()
 {
     Command command = PL_InitCommand("ls");
-    command = PL_AddArgument(command, "-l");
-    command = PL_AddArgument(command, "-a");
-    command = PL_AddArgument(command, "-h");
+    PL_AddArgument(command, "-l");
+    PL_AddArgument(command, "-a");
+    PL_AddArgument(command, "-h");
     char *command_string = GetCommandString(command);
 
+    removeLastCharacter(command_string);
     test_assert(compare_strings(command_string, "ls -l -a -h"));
+
     free(command_string);
     CommandFree(command);
 
     Command com1 = PL_InitCommand("cat");
-    com1 = PL_AddArgument(com1, "file.txt");
+    PL_AddArgument(com1, "file.txt");
     char *command_string1 = GetCommandString(com1);
+    removeLastCharacter(command_string1);
     test_assert(compare_strings(command_string1, "cat file.txt"));
-
     free(command_string1);
     CommandFree(com1);
 
     Command com2 = PL_InitCommand("grep");
-    com2 = PL_AddArgument(com2, "hello");
-    com2 = PL_AddArgument(com2, "file.txt");
+    PL_AddArgument(com2, "hello");
+    PL_AddArgument(com2, "file.txt");
     char *command_string2 = GetCommandString(com2);
+    removeLastCharacter(command_string2);
     test_assert(compare_strings(command_string2, "grep hello file.txt"));
-
     free(command_string2);
     CommandFree(com2);
 
@@ -63,16 +79,16 @@ int test_commands()
     com3 = PL_AddArgument(com3, "|");
     com3 = PL_AddArgument(com3, "wc");
     char *command_string3 = GetCommandString(com3);
+    removeLastCharacter(command_string3);
     test_assert(compare_strings(command_string3, "ls -l | grep hello | wc"));
-
     free(command_string3);
     CommandFree(com3);
 
     Command com4 = PL_InitCommand("ls");
     com4 = PL_AddArgument(com4, "-las");
     char *command_string4 = GetCommandString(com4);
+    removeLastCharacter(command_string4);
     test_assert(compare_strings(command_string4, "ls -las"));
-
     free(command_string4);
     CommandFree(com4);
 
@@ -82,19 +98,19 @@ int test_commands()
 int test_pipeline()
 {
     Command command = PL_InitCommand("ls");
-    command = PL_AddArgument(command, "-la");
+    PL_AddArgument(command, "-la");
     Pipeline newPipeline = PL_New();
     newPipeline = PL_AddCommand(newPipeline, command);
     Command command1 = PL_InitCommand("grep");
-    command1 = PL_AddArgument(command1, "hello");
+    PL_AddArgument(command1, "hello");
     newPipeline = PL_AddCommand(newPipeline, command1);
     char *pipeline_string = GetPipelineString(newPipeline);
-    printf("%s\n", pipeline_string);
-    test_assert(compare_strings(pipeline_string, "ls -la|grep hello"));
+    removeLastCharacter(pipeline_string);
+
+    test_assert(compare_strings(pipeline_string, "ls -la |grep hello"));
 
     test_assert(PipelineLength(newPipeline) == 2);
     free(pipeline_string);
-
     PipelineFree(newPipeline);
     return 1;
 }

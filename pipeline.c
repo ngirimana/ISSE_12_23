@@ -3,10 +3,6 @@
 #include <assert.h>
 #include "pipeline.h"
 
-// #define MAX_FILENAME_LENGTH 256
-// #define MAX_ARGS 10
-// #define MAX_COMMANDS 10
-
 struct _command
 {
     char command[MAX_FILENAME_LENGTH];
@@ -45,10 +41,10 @@ Pipeline PL_New()
     return new_pipeline;
 }
 
-Command PL_New_Command()
+Command PL_InitCommand(const char *executable)
 {
     Command new_command = (Command)malloc(sizeof(struct _command));
-    assert(new_command);
+    // assert(new_command);
 
     new_command->num_arguments = 0;
     for (int i = 0; i < MAX_ARGS; ++i)
@@ -56,17 +52,12 @@ Command PL_New_Command()
         new_command->arguments[i] = NULL;
     }
 
-    return new_command;
-}
-
-Command PL_InitCommand(const char *executable)
-{
-    Command new_command = PL_New_Command();
-    if (new_command != NULL && executable != NULL)
+    if (executable != NULL)
     {
         strncpy(new_command->command, executable, MAX_FILENAME_LENGTH - 1);
         new_command->command[MAX_FILENAME_LENGTH - 1] = '\0'; // Ensure null-terminated string
     }
+
     return new_command;
 }
 
@@ -85,7 +76,7 @@ Command PL_AddArgument(Command command, const char *argument)
         new_arg[arg_len] = '\0';
         command->arguments[command->num_arguments++] = new_arg;
     }
-
+    // free(new_arg);
     return command;
 }
 
@@ -114,8 +105,10 @@ Pipeline PL_AddCommand(Pipeline pipeline, Command command)
             }
             temp->next = new_node;
         }
+
         pipeline->num_commands++;
     }
+    free(command);
 
     return pipeline;
 }
@@ -194,7 +187,7 @@ char *GetPipelineString(Pipeline pipeline)
                 current = current->next;
                 if (current != NULL)
                 {
-                    strcat(pipeline_string, "|"); // Add a pipe between commands
+                    strcat(pipeline_string, "|");
                 }
             }
         }
