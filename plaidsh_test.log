@@ -1,0 +1,175 @@
+Welcome to Plaid Shell!
+#? 
+#?     
+No command specified
+#?   \  
+Illegal escape character  
+sh: 1:  : not found
+\: Command not found.*Child.*exited with status 2#? pwd
+/home/pico/Documents/ISSE/Assignment/12
+#? ls --color
+ clist.c    pipeline.c        plaidsh.c                 token.h
+ clist.h    pipeline.h       [0m[01;34m'Plaid Shell Playground'[0m   tokenize.c
+ clist.o    pipeline.o        plaidsh.o                 tokenize.h
+ Makefile   [01;32mpipeline_test[0m     plaidsh_test.log          tokenize.o
+ parse.c    pipeline_test.c   [01;32mplaidsh_test.py[0m           [01;32mtokenize_test[0m
+ parse.h    pipeline_test.o   README.md                 tokenize_test.c
+ parse.o    [01;32mplaidsh[0m           [01;32msetup_playground.sh[0m       tokenize_test.o
+#? ./setup_playground.sh
+Plaid Shell playground created...
+#? cd Plaid\ Shell\ Playground
+Illegal escape character  
+Illegal escape character  
+chdir: No such file or directory
+#? pwd
+/home/pico/Documents/ISSE/Assignment/12
+#? ls
+ clist.c    pipeline.c	      plaidsh.c		        token.h
+ clist.h    pipeline.h	     'Plaid Shell Playground'   tokenize.c
+ clist.o    pipeline.o	      plaidsh.o		        tokenize.h
+ Makefile   pipeline_test     plaidsh_test.log	        tokenize.o
+ parse.c    pipeline_test.c   plaidsh_test.py	        tokenize_test
+ parse.h    pipeline_test.o   README.md		        tokenize_test.c
+ parse.o    plaidsh	      setup_playground.sh       tokenize_test.o
+#? ls *.txt
+ls: cannot access '*.txt': No such file or directory
+ls: Command not found.*Child.*exited with status 2#? echo $PATH
+/home/pico/.bun/bin:/home/pico/.cache/cloud-code/installer/google-cloud-sdk/bin:/home/pico/.nvm/versions/node/v20.9.0/bin:/home/pico/.bun/bin:/home/pico/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+#? author
+NGIRIMANA Schadrack
+#? author | sed -e "s/^/Written by /"
+Written by NGIRIMANA Schadrack
+#? grep Happy *.txt
+grep: *.txt: No such file or directory
+grep: Command not found.*Child.*exited with status 2#? cat "best sitcoms.txt" | grep Seinfeld
+cat: 'best sitcoms.txt': No such file or directory
+cat: Command not found.*Child.*exited with status 2#? cat "best sitcoms.txt"|grep Seinfeld|wc -l
+cat: 'best sitcoms.txt': No such file or directory
+0
+#? sed -ne "s/The Simpsons/I Love Lucy/p" < best\ sitcoms.txt > output
+Illegal escape character  
+Multiple redirection
+Multiple redirection
+sh: 1: cannot open best sitcoms.txt: No such file
+sed: Command not found.*Child.*exited with status 2#? ls -l
+total 596
+-rw-rw-r-- 1 pico pico   7477 Uku 13 10:24  clist.c
+-rw-rw-r-- 1 pico pico   5884 Uku 13 10:24  clist.h
+-rw-rw-r-- 1 pico pico  30976 Uku 13 10:37  clist.o
+-rw-rw-r-- 1 pico pico    518 Uku 13 10:24  Makefile
+-rw-rw-r-- 1 pico pico   5176 Uku 13 10:24  parse.c
+-rw-rw-r-- 1 pico pico    260 Uku 13 10:24  parse.h
+-rw-rw-r-- 1 pico pico  15600 Uku 13 10:37  parse.o
+-rw-rw-r-- 1 pico pico   6143 Uku 13 10:56  pipeline.c
+-rw-rw-r-- 1 pico pico    828 Uku 13 10:24  pipeline.h
+-rw-rw-r-- 1 pico pico  18392 Uku 13 10:56  pipeline.o
+-rwxrwxr-x 1 pico pico  85168 Uku 13 10:56  pipeline_test
+-rw-rw-r-- 1 pico pico   3414 Uku 13 10:24  pipeline_test.c
+-rw-rw-r-- 1 pico pico  21616 Uku 13 10:37  pipeline_test.o
+-rwxrwxr-x 1 pico pico  85392 Uku 13 10:56  plaidsh
+-rw-rw-r-- 1 pico pico   5050 Uku 13 10:24  plaidsh.c
+drwxrwxr-x 2 pico pico   4096 Uku 13 10:56 'Plaid Shell Playground'
+-rw-rw-r-- 1 pico pico  21472 Uku 13 10:37  plaidsh.o
+-rw-rw-r-- 1 pico pico   2605 Uku 13 10:57  plaidsh_test.log
+-rwxrwxr-x 1 pico pico   5151 Uku 13 10:24  plaidsh_test.py
+-rw-rw-r-- 1 pico pico     65 Uku 13 10:24  README.md
+-rwxrwxr-x 1 pico pico    590 Uku 13 10:24  setup_playground.sh
+-rw-rw-r-- 1 pico pico    378 Uku 13 10:24  token.h
+-rw-rw-r-- 1 pico pico   7223 Uku 13 10:24  tokenize.c
+-rw-rw-r-- 1 pico pico   1847 Uku 13 10:24  tokenize.h
+-rw-rw-r-- 1 pico pico  27104 Uku 13 10:37  tokenize.o
+-rwxrwxr-x 1 pico pico 116208 Uku 13 10:56  tokenize_test
+-rw-rw-r-- 1 pico pico   6436 Uku 13 10:24  tokenize_test.c
+-rw-rw-r-- 1 pico pico  63648 Uku 13 10:37  tokenize_test.o
+#? cat output
+cat: output: No such file or directory
+cat: Command not found.*Child.*exited with status 2#? this is not a command
+sh: 1: this: not found
+this: Command not found.*Child.*exited with status 2#? echo Hello > /usr/bin/cant_write
+Multiple redirection
+sh: 1: cannot create /usr/bin/cant_write: Permission denied
+echo: Command not found.*Child.*exited with status 2#? cd
+#? pwd
+/home/pico
+#? cd /home/pico/Documents/ISSE/Assignment/12
+chdir: No such file or directory
+#? pwd
+/home/pico
+#? cd ~
+chdir: No such file or directory
+#? pwd
+/home/pico
+#? echo "Operator could you help me place this call?"
+Operator could you help me place this call?
+#? seq 10 | wc"-l"
+10
+#? seq 10 | wc"-l"[C[C[Cecho "Operator could you help me place this call?"
+Operator could you help me place this call?
+#? env|grep PATH
+LOCPATH_VSCODE_SNAP_ORIG=
+GTK_PATH=/snap/code/147/usr/lib/x86_64-linux-gnu/gtk-3.0
+WINDOWPATH=2
+PATH=/home/pico/.bun/bin:/home/pico/.cache/cloud-code/installer/google-cloud-sdk/bin:/home/pico/.nvm/versions/node/v20.9.0/bin:/home/pico/.bun/bin:/home/pico/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+LOCPATH=/snap/code/147/usr/lib/locale
+GTK_PATH_VSCODE_SNAP_ORIG=
+#? echo Hello World | cat -n | cat -n | cat -n
+     1	     1	     1	Hello World
+#? echo \c
+Illegal escape character c
+c
+#? echo "\c"
+Illegal escape character c
+#? echo "hi
+Unterminated quote
+
+#? echo "|1|2|3|" | sed -e "s/[0-9]//"
+||2|3|
+#? printf "=%s=\n" one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty twenty-one twenty-two twenty-three twenty-four|wc -l
+24
+#? printf"+%s"one"two"three
++one+two+three#? 
+#? echo > file1 >file2
+Multiple redirection
+Multiple redirection
+#? cat <
+Expect filename after redirection
+sh: 1: Syntax error: end of file unexpected
+cat: Command not found.*Child.*exited with status 2#? cat | cat | cat >
+Expect filename after redirection
+sh: 1: Syntax error: end of file unexpected
+cat: Command not found.*Child.*exited with status 2#? grep | 
+No command specified
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+grep: Command not found.*Child.*exited with status 2#? | grep
+No command specified
+#? echo || grep
+No command specified
+Usage: grep [OPTION]... PATTERNS [FILE]...
+Try 'grep --help' for more information.
+echo: Command not found.*Child.*exited with status 2#? echo \<\|\> | cat
+<|>
+#? echo hello\|grep ell
+hello|grep ell
+#? exit
+
+=================================================================
+[1m[31m==33218==ERROR: LeakSanitizer: detected memory leaks
+[1m[0m
+[1m[34mDirect leak of 78776 byte(s) in 43 object(s) allocated from:
+[1m[0m    #0 0x7fb5477f8887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145
+    #1 0x563390bff467 in PL_New_Command /home/pico/Documents/ISSE/Assignment/12/pipeline.c:50
+    #2 0x563390bff560 in PL_InitCommand /home/pico/Documents/ISSE/Assignment/12/pipeline.c:64
+    #3 0x563390c00374 in Parse /home/pico/Documents/ISSE/Assignment/12/parse.c:24
+    #4 0x563390c010cd in main /home/pico/Documents/ISSE/Assignment/12/plaidsh.c:53
+    #5 0x7fb547526082 in __libc_start_main ../csu/libc-start.c:308
+
+[1m[34mDirect leak of 27480 byte(s) in 15 object(s) allocated from:
+[1m[0m    #0 0x7fb5477f8887 in __interceptor_malloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:145
+    #1 0x563390bff467 in PL_New_Command /home/pico/Documents/ISSE/Assignment/12/pipeline.c:50
+    #2 0x563390bff560 in PL_InitCommand /home/pico/Documents/ISSE/Assignment/12/pipeline.c:64
+    #3 0x563390c00a93 in Parse /home/pico/Documents/ISSE/Assignment/12/parse.c:113
+    #4 0x563390c010cd in main /home/pico/Documents/ISSE/Assignment/12/plaidsh.c:53
+    #5 0x7fb547526082 in __libc_start_main ../csu/libc-start.c:308
+
+SUMMARY: AddressSanitizer: 106256 byte(s) leaked in 58 allocation(s).
